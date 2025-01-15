@@ -1,14 +1,18 @@
 import Express from 'express'
+
 import {DeliveryParams} from '@/delivery/types'
-import {createRules} from './rules'
-import {createRouteHandler} from '../../routeHandler'
 import {IHandler} from '../types'
+import {createRouteHandler} from '../../routeHandler'
+
+import {createRules, getPostRules} from './rules'
 import {buildCreate, Create} from './create'
+import {buildGetPost, GetPost} from './getPost'
 
 type Params = Pick<DeliveryParams, 'post'>;
 
 export type PostMethods = {
   create: Create
+  getPost: GetPost
 }
 
 const buildPostRoutes = (methods: PostMethods) => {
@@ -36,7 +40,7 @@ const buildPostRoutes = (methods: PostMethods) => {
      *              application/json:
      *                schema:
      *                  properties:
-     *                    user:
+     *                    post:
      *                      $ref: '#/components/schemas/Post'
      */
     namespace.post(
@@ -45,17 +49,53 @@ const buildPostRoutes = (methods: PostMethods) => {
       createRouteHandler(methods.create)
     )
     
+    /**
+     * @openapi
+     * /posts/{id}:
+     *   get:
+     *     tags: [Post]
+     *     summary: Retrieve a post by ID
+     *     description: Fetch a single post by its unique identifier.
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: The unique identifier of the post.
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: Successfully retrieved the post.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               properties:
+     *                 post:
+     *                   $ref: '#/components/schemas/Post'
+     *       404:
+     *         description: Post not found.
+     */
+    namespace.get(
+      '/:id',
+      getPostRules,
+      createRouteHandler(methods.getPost)
+    )
+    
     root.use('/posts', namespace)
   }
 }
 
 export const buildPostHandler = (params: Params): IHandler => {
   const create = buildCreate(params)
+  const getPost = buildGetPost(params)
   
   return {
     registerRoutes: buildPostRoutes(
       {
-        create
+        create,
+        getPost,
       }
     )
   }
