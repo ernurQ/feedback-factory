@@ -1,7 +1,7 @@
-import { IUser } from '@/domain/entity/user';
-import { UseCaseParams } from '../types';
-import * as bcrypt from 'bcrypt';
-import { InternalError, InvalidDataError } from '@/domain/errors';
+import {IUser} from '@/domain/entity/user'
+import {UseCaseParams} from '../types'
+import * as bcrypt from 'bcrypt'
+import {InternalError, InvalidDataError} from '@/domain/errors'
 
 export type Register = (params: {
   email: string;
@@ -37,7 +37,7 @@ export const buildRegister = ({ adapter }: UseCaseParams): Register => (
         id: true,
         email: true,
         avatar: true,
-        created_at: true
+        createdAt: true
       }
     });
 

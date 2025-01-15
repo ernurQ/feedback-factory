@@ -1,6 +1,6 @@
-import {UseCaseParams} from '@/domain/usecase/types';
-import {IUser} from '@/domain/entity/user';
-import { NotFoundError } from '@/domain/errors';
+import {UseCaseParams} from '@/domain/usecase/types'
+import {IUser} from '@/domain/entity/user'
+import {NotFoundError} from '@/domain/errors'
 
 export type GetMe = (data: {
   id: string,
@@ -16,7 +16,7 @@ export const buildGetMe = ({adapter}: UseCaseParams): GetMe=>{
         id: true,
         email: true,
         avatar: true,
-        created_at: true
+        createdAt: true
       }
     })
 

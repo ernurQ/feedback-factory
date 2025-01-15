@@ -1,8 +1,8 @@
-import { verifyJWT } from '@/lib';
-import { JwtPayload } from 'jsonwebtoken';
-import { UseCaseParams } from '../types';
-import { IUser } from '@/domain/entity/user';
-import { NotFoundError } from '@/domain/errors';
+import {verifyJWT} from '@/lib'
+import {JwtPayload} from 'jsonwebtoken'
+import {UseCaseParams} from '../types'
+import {IUser} from '@/domain/entity/user'
+import {NotFoundError} from '@/domain/errors'
 
 export type Refresh = (data: {
   refreshToken: string
@@ -30,7 +30,7 @@ export const buildRefresh = ({service, adapter }: UseCaseParams): Refresh=>{
         id: true,
         email: true,
         avatar: true,
-        created_at: true
+        createdAt: true
       }
     })
 
