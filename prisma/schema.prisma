@@ -8,9 +8,39 @@ datasource db {
 }
 
 model User {
-  id                              String                @id @default(uuid())
-  email                           String?               @unique
-  password                        String?
-  avatar                          String?
-  created_at                      DateTime              @default(now())
+  id        String   @id @default(uuid())
+  email     String?  @unique
+  password  String?
+  avatar    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  posts Post[]
+}
+
+model Post {
+  id          String  @id @default(uuid())
+  title       String
+  description String? @default("")
+
+  authorId String @map("author_id")
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  categories Category[]
+  statuses   Status[]
+}
+
+model Category {
+  id   String @id @default(uuid())
+  name String
+
+  postId String @map("post_id")
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Status {
+  id   String @id @default(uuid())
+  name String
+
+  postId String @map("post_id")
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
 }
