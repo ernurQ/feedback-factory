@@ -1,14 +1,16 @@
 import Express from 'express'
-import { IHandler } from './types'
-import { DeliveryParams } from '@/delivery/types'
-import { buildExampleHandler } from './example'
-import { buildAuthHandler } from './auth'
+import {IHandler} from './types'
+import {DeliveryParams} from '@/delivery/types'
+import {buildExampleHandler} from './example'
+import {buildAuthHandler} from './auth'
+import {buildPostHandler} from '@/delivery/http/v1/handlers/post'
 
 export const buildHandler = (params: DeliveryParams): Express.Router => {
   const router = Express.Router()
 
   const handlers: Array<IHandler> = [
     buildAuthHandler(params),
+    buildPostHandler(params),
     buildExampleHandler(params)
   ]
 
