@@ -1,11 +1,11 @@
-import { User } from '@prisma/client';
+import {User} from '@prisma/client'
 
 export interface IUser extends User {}
 
 /**
  * @openapi
  * components:
- *   entities:
+ *   schemas:
  *      User:
  *          required:
  *            - id

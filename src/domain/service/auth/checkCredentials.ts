@@ -1,6 +1,6 @@
-import {IUser} from '@/domain/entity/user';
-import * as bcrypt from 'bcrypt';
-import { Adapter } from '@/domain/types';
+import {IUser} from '@/domain/entity/user'
+import * as bcrypt from 'bcrypt'
+import {Adapter} from '@/domain/types'
 
 export type CheckCredentials = (data: {
   email: string,
@@ -23,16 +23,18 @@ export const buildCheckCredentials = ({userRepository}: Adapter): CheckCredentia
         id: true,
         email: true,
         avatar: true,
-        created_at: true
+        createdAt: true,
+        password: true
       }
-    }) 
-
+    })
+    
     if (!user || !user.password) {
       return null
     }
 
     const passwordsSame = await bcrypt.compare(password, user?.password)
-
+    user.password = null
+    
     if (!passwordsSame) {
       return null
     }
