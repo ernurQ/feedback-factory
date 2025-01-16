@@ -18,3 +18,21 @@ export const createStatusRules = [
   authRequired(),
   validateSchema
 ];
+
+/**
+ * @openapi
+ * components:
+ *   rules:
+ *     update-status:
+ *       required:
+ *         - name
+ *       properties:
+ *         name:
+ *           type: string
+ */
+export const updateStatusRules = [
+  check('name').exists().notEmpty().isString(),
+  header('authorization').exists().notEmpty().isString(),
+  authRequired(),
+  validateSchema
+];
