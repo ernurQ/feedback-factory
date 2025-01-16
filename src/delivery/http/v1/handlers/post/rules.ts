@@ -61,3 +61,22 @@ export const updatePostRules = [
   check('description').optional().isString(),
   validateSchema
 ]
+
+/**
+ * @openapi
+ * components:
+ *   rules:
+ *      delete-post:
+ *        required:
+ *          - id
+ *        properties:
+ *          id:
+ *            type: string
+ *            description: Unique identifier of the post
+ */
+export const deletePostRules = [
+  header('authorization').exists().notEmpty().isString(),
+  authRequired(),
+  param('id').exists().notEmpty().isString(),
+  validateSchema
+]
