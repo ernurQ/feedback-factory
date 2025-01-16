@@ -39,3 +39,25 @@ export const getPostRules = [
   param('id').exists().notEmpty().isString(),
   validateSchema,
 ];
+
+
+/**
+ * @openapi
+ * components:
+ *   rules:
+ *      update-post:
+ *          properties:
+ *             title:
+ *                type: string
+ *                required: false
+ *             description:
+ *                type: string
+ *                required: false
+ */
+export const updatePostRules = [
+  header('authorization').exists().notEmpty().isString(),
+  authRequired(),
+  check('title').optional().isString(),
+  check('description').optional().isString(),
+  validateSchema
+]

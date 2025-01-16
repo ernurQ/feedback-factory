@@ -4,15 +4,17 @@ import {DeliveryParams} from '@/delivery/types'
 import {IHandler} from '../types'
 import {createRouteHandler} from '../../routeHandler'
 
-import {createRules, getPostRules} from './rules'
+import {createRules, getPostRules, updatePostRules} from './rules'
 import {buildCreate, Create} from './create'
 import {buildGetPost, GetPost} from './getPost'
+import {buildUpdate, Update} from './update'
 
 type Params = Pick<DeliveryParams, 'post'>;
 
 export type PostMethods = {
   create: Create
   getPost: GetPost
+  update: Update
 }
 
 const buildPostRoutes = (methods: PostMethods) => {
@@ -83,6 +85,36 @@ const buildPostRoutes = (methods: PostMethods) => {
       createRouteHandler(methods.getPost)
     )
     
+    /**
+     * @openapi
+     * /posts/{id}:
+     *   put:
+     *     tags: [Post]
+     *     produces:
+     *       - application/json
+     *     requestBody:
+     *       in: body
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/rules/update-post'
+     *     responses:
+     *        201:
+     *           description: Updated post.
+     *           content:
+     *              application/json:
+     *                schema:
+     *                  properties:
+     *                    post:
+     *                      $ref: '#/components/schemas/Post'
+     */
+    namespace.put(
+      '/:id',
+      updatePostRules,
+      createRouteHandler(methods.update)
+    )
+    
     root.use('/posts', namespace)
   }
 }
@@ -90,12 +122,14 @@ const buildPostRoutes = (methods: PostMethods) => {
 export const buildPostHandler = (params: Params): IHandler => {
   const create = buildCreate(params)
   const getPost = buildGetPost(params)
+  const update = buildUpdate(params)
   
   return {
     registerRoutes: buildPostRoutes(
       {
         create,
         getPost,
+        update,
       }
     )
   }
