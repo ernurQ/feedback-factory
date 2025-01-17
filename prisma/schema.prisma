@@ -14,7 +14,8 @@ model User {
   avatar    String?
   createdAt DateTime @default(now()) @map("created_at")
 
-  posts Post[]
+  posts     Post[]
+  feedbacks Feedback[]
 }
 
 model Post {
@@ -27,6 +28,7 @@ model Post {
 
   categories Category[]
   statuses   Status[]
+  feedbacks  Feedback[]
 }
 
 model Category {
@@ -35,6 +37,8 @@ model Category {
 
   postId String @map("post_id")
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  feedbacks Feedback[]
 }
 
 model Status {
@@ -43,4 +47,26 @@ model Status {
 
   postId String @map("post_id")
   post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  feedbacks Feedback[]
+}
+
+model Feedback {
+  id          String   @id @default(uuid())
+  title       String
+  description String?  @default("")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  postId String @map("post_id")
+  post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  authorId String @map("author_id")
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  statusId String? @map("status_id")
+  status   Status? @relation(fields: [statusId], references: [id])
+
+  categoryId String?   @map("category_id")
+  category   Category? @relation(fields: [categoryId], references: [id])
 }
