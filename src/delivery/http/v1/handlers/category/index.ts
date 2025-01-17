@@ -4,13 +4,15 @@ import {DeliveryParams} from '@/delivery/types'
 import {IHandler} from '../types'
 import {createRouteHandler} from '../../routeHandler'
 
-import {createCategoryRules} from './rules'
+import {createCategoryRules, updateCategoryRules} from './rules'
 import {buildCreate, Create} from './create'
+import {buildUpdate, Update} from './update'
 
 type Params = Pick<DeliveryParams, 'category'>;
 
 export type CategoryMethods = {
   create: Create,
+  update: Update,
 }
 
 const buildCategoryRoutes = (methods: CategoryMethods) => {
@@ -51,6 +53,41 @@ const buildCategoryRoutes = (methods: CategoryMethods) => {
       createCategoryRules,
       createRouteHandler(methods.create)
     )
+    
+    /**
+     * @openapi
+     * /categories/{id}:
+     *   put:
+     *     tags: [Category]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       required: true
+     *       description: The unique identifier of the category.
+     *     requestBody:
+     *       in: body
+     *       required: true
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/rules/update-category'
+     *     produces:
+     *       - application/json
+     *     responses:
+     *        200:
+     *           description: Updated Category.
+     *           content:
+     *              application/json:
+     *                schema:
+     *                  properties:
+     *                    status:
+     *                      $ref: '#/components/schemas/Category'
+     */
+    namespace.put(
+      '/:id',
+      updateCategoryRules,
+      createRouteHandler(methods.update)
+    )
 
     root.use('/categories', namespace)
   }
@@ -58,11 +95,13 @@ const buildCategoryRoutes = (methods: CategoryMethods) => {
 
 export const buildCategoryHandler = (params: Params): IHandler => {
   const create = buildCreate(params)
+  const update = buildUpdate(params)
   
   return {
     registerRoutes: buildCategoryRoutes(
       {
         create,
+        update,
       }
     )
   }
