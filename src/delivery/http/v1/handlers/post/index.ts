@@ -63,17 +63,15 @@ const buildPostRoutes = (methods: PostMethods) => {
      * /posts/{id}:
      *   get:
      *     tags: [Post]
-     *     summary: Retrieve a post by ID
-     *     description: Fetch a single post by its unique identifier.
      *     parameters:
      *       - in: path
      *         name: id
-     *         required: true
      *         schema:
      *           type: string
-     *         description: The unique identifier of the post.
+     *         description: Unique identifier of the post
      *     produces:
      *       - application/json
+     *
      *     responses:
      *       200:
      *         description: Successfully retrieved the post.
@@ -97,24 +95,30 @@ const buildPostRoutes = (methods: PostMethods) => {
      * /posts/{id}:
      *   put:
      *     tags: [Post]
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: Unique identifier of the post
      *     produces:
      *       - application/json
      *     requestBody:
-     *       in: body
      *       required: true
      *       content:
      *         application/json:
      *           schema:
      *             $ref: '#/components/rules/update-post'
      *     responses:
-     *        201:
-     *           description: Updated post.
-     *           content:
-     *              application/json:
-     *                schema:
-     *                  properties:
-     *                    post:
-     *                      $ref: '#/components/schemas/Post'
+     *       201:
+     *         description: Updated post.
+     *         content:
+     *           application/json:
+     *             schema:
+     *               properties:
+     *                 post:
+     *                   $ref: '#/components/schemas/Post'
      */
     namespace.put(
       '/:id',
@@ -127,6 +131,13 @@ const buildPostRoutes = (methods: PostMethods) => {
      * /posts/{id}:
      *   delete:
      *     tags: [Post]
+     *     parameters:
+     *       - in: path
+     *         name: id
+     *         required: true
+     *         schema:
+     *           type: string
+     *         description: Unique identifier of the post
      *     produces:
      *       - application/json
      *     responses:

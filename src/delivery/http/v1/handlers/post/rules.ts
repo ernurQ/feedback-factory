@@ -23,18 +23,7 @@ export const createRules = [
   validateSchema
 ];
 
-/**
- * @openapi
- * components:
- *   rules:
- *      get-post:
- *          required:
- *             - id
- *          properties:
- *             id:
- *                type: string
- *                description: Unique identifier of the post
- */
+
 export const getPostRules = [
   param('id').exists().notEmpty().isString(),
   validateSchema,
@@ -46,15 +35,16 @@ export const getPostRules = [
  * components:
  *   rules:
  *      update-post:
- *          properties:
- *             title:
- *                type: string
- *                required: false
- *             description:
- *                type: string
- *                required: false
+ *        properties:
+ *          title:
+ *            type: string
+ *            required: false
+ *          description:
+ *            type: string
+ *            required: false
  */
 export const updatePostRules = [
+  param('id').exists().notEmpty().isString(),
   header('authorization').exists().notEmpty().isString(),
   authRequired(),
   check('title').optional().isString(),
@@ -62,18 +52,6 @@ export const updatePostRules = [
   validateSchema
 ]
 
-/**
- * @openapi
- * components:
- *   rules:
- *      delete-post:
- *        required:
- *          - id
- *        properties:
- *          id:
- *            type: string
- *            description: Unique identifier of the post
- */
 export const deletePostRules = [
   header('authorization').exists().notEmpty().isString(),
   authRequired(),
