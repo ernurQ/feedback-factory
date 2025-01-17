@@ -38,3 +38,10 @@ export const updateCategoryRules = [
   authRequired(),
   validateSchema
 ];
+
+export const deleteCategoryRules = [
+  param('id').exists().notEmpty().isString(),
+  header('authorization').exists().notEmpty().isString(),
+  authRequired(),
+  validateSchema
+]

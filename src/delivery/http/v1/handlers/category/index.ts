@@ -4,15 +4,21 @@ import {DeliveryParams} from '@/delivery/types'
 import {IHandler} from '../types'
 import {createRouteHandler} from '../../routeHandler'
 
-import {createCategoryRules, updateCategoryRules} from './rules'
+import {
+  createCategoryRules,
+  deleteCategoryRules,
+  updateCategoryRules
+} from './rules'
 import {buildCreate, Create} from './create'
 import {buildUpdate, Update} from './update'
+import {buildDelete, Delete} from './delete'
 
 type Params = Pick<DeliveryParams, 'category'>;
 
 export type CategoryMethods = {
   create: Create,
   update: Update,
+  delete: Delete,
 }
 
 const buildCategoryRoutes = (methods: CategoryMethods) => {
@@ -88,7 +94,36 @@ const buildCategoryRoutes = (methods: CategoryMethods) => {
       updateCategoryRules,
       createRouteHandler(methods.update)
     )
-
+    
+    /**
+     * @openapi
+     * /categories/{id}:
+     *   delete:
+     *     tags: [Category]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       required: true
+     *       description: The unique identifier of the category.
+     *     produces:
+     *       - application/json
+     *     responses:
+     *        200:
+     *           description: Deleted Category.
+     *           content:
+     *              application/json:
+     *                schema:
+     *                  properties:
+     *                    status:
+     *                      $ref: '#/components/schemas/Category'
+     */
+    namespace.delete(
+      '/:id',
+      deleteCategoryRules,
+      createRouteHandler(methods.delete)
+    )
+    
+    
     root.use('/categories', namespace)
   }
 }
@@ -96,12 +131,14 @@ const buildCategoryRoutes = (methods: CategoryMethods) => {
 export const buildCategoryHandler = (params: Params): IHandler => {
   const create = buildCreate(params)
   const update = buildUpdate(params)
+  const deleteCategory = buildDelete(params)
   
   return {
     registerRoutes: buildCategoryRoutes(
       {
         create,
         update,
+        delete: deleteCategory,
       }
     )
   }
