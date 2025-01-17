@@ -37,3 +37,11 @@ export const updateStatusRules = [
   authRequired(),
   validateSchema
 ];
+
+
+export const deleteStatusRules = [
+  param('id').exists().notEmpty().isString(),
+  header('authorization').exists().notEmpty().isString(),
+  authRequired(),
+  validateSchema
+]

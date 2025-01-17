@@ -4,15 +4,17 @@ import {DeliveryParams} from '@/delivery/types'
 import {IHandler} from '../types'
 import {createRouteHandler} from '../../routeHandler'
 
-import {createStatusRules, updateStatusRules} from './rules'
+import {createStatusRules, deleteStatusRules, updateStatusRules} from './rules'
 import {buildCreate, Create} from './create'
 import {buildUpdate, Update} from './update'
+import {buildDelete, Delete} from './delete'
 
 type Params = Pick<DeliveryParams, 'status'>;
 
 export type PostMethods = {
   create: Create,
   update: Update,
+  delete: Delete,
 }
 
 const buildPostRoutes = (methods: PostMethods) => {
@@ -89,6 +91,34 @@ const buildPostRoutes = (methods: PostMethods) => {
       createRouteHandler(methods.update)
     )
     
+    /**
+     * @openapi
+     * /statuses/{id}:
+     *   delete:
+     *     tags: [Status]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       required: true
+     *       description: The unique identifier of the status.
+     *     produces:
+     *       - application/json
+     *     responses:
+     *        200:
+     *           description: Deleted Status.
+     *           content:
+     *              application/json:
+     *                schema:
+     *                  properties:
+     *                    status:
+     *                      $ref: '#/components/schemas/Status'
+     */
+    namespace.delete(
+      '/:id',
+      deleteStatusRules,
+      createRouteHandler(methods.delete)
+    )
+    
     root.use('/statuses', namespace)
   }
 }
@@ -96,12 +126,14 @@ const buildPostRoutes = (methods: PostMethods) => {
 export const buildStatusHandler = (params: Params): IHandler => {
   const create = buildCreate(params)
   const update = buildUpdate(params)
+  const deleteStatus = buildDelete(params)
   
   return {
     registerRoutes: buildPostRoutes(
       {
         create,
         update,
+        delete: deleteStatus,
       }
     )
   }
