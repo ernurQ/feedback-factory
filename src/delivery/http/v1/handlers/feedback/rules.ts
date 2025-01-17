@@ -51,3 +51,11 @@ export const setFeedbackStatusRules = [
   authRequired(),
   validateSchema
 ];
+
+export const setFeedbackCategoryRules = [
+  param('id').exists().notEmpty().isString(),
+  query('category').optional().isString(),
+  header('authorization').exists().notEmpty().isString(),
+  authRequired(),
+  validateSchema
+];

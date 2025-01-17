@@ -6,12 +6,14 @@ import {createRouteHandler} from '../../routeHandler'
 
 import {
   createFeedbackRules,
+  setFeedbackCategoryRules,
   setFeedbackStatusRules,
   updateFeedbackRules
 } from './rules'
 import {buildCreate, Create} from './create'
 import {buildUpdate, Update} from './update'
 import {buildSetStatus, SetStatus} from './setStatus'
+import {buildSetCategory, SetCategory} from './setCategory'
 
 type Params = Pick<DeliveryParams, 'feedback'>;
 
@@ -19,6 +21,7 @@ export type FeedbackMethods = {
   create: Create,
   update: Update,
   setStatus: SetStatus
+  setCategory: SetCategory,
 }
 
 const buildPostRoutes = (methods: FeedbackMethods) => {
@@ -127,6 +130,38 @@ const buildPostRoutes = (methods: FeedbackMethods) => {
       createRouteHandler(methods.setStatus)
     )
     
+    /**
+     * @openapi
+     * /feedbacks/{id}/category:
+     *   patch:
+     *     tags: [Feedback]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       required: true
+     *       description: The unique identifier of the feedback.
+     *     - in: query
+     *       name: categoryId
+     *       required: false
+     *       description: The unique identifier of the category. Do not specify to remove status.
+     *     produces:
+     *       - application/json
+     *     responses:
+     *        200:
+     *           description: Updated Feedback.
+     *           content:
+     *              application/json:
+     *                schema:
+     *                  properties:
+     *                    status:
+     *                      $ref: '#/components/schemas/Feedback'
+     */
+    namespace.patch(
+      '/:id/category',
+      setFeedbackCategoryRules,
+      createRouteHandler(methods.setCategory)
+    )
+    
     root.use('/feedbacks', namespace)
   }
 }
@@ -135,6 +170,7 @@ export const buildFeedbackHandler = (params: Params): IHandler => {
   const create = buildCreate(params)
   const update = buildUpdate(params)
   const setStatus = buildSetStatus(params)
+  const setCategory = buildSetCategory(params)
   
   return {
     registerRoutes: buildPostRoutes(
@@ -142,6 +178,7 @@ export const buildFeedbackHandler = (params: Params): IHandler => {
         create,
         update,
         setStatus,
+        setCategory,
       }
     )
   }
