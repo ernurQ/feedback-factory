@@ -59,3 +59,10 @@ export const setFeedbackCategoryRules = [
   authRequired(),
   validateSchema
 ];
+
+export const deleteFeedbackRules = [
+  param('id').exists().notEmpty().isString(),
+  header('authorization').exists().notEmpty().isString(),
+  authRequired(),
+  validateSchema
+];

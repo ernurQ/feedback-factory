@@ -6,6 +6,7 @@ import {createRouteHandler} from '../../routeHandler'
 
 import {
   createFeedbackRules,
+  deleteFeedbackRules,
   setFeedbackCategoryRules,
   setFeedbackStatusRules,
   updateFeedbackRules
@@ -14,6 +15,7 @@ import {buildCreate, Create} from './create'
 import {buildUpdate, Update} from './update'
 import {buildSetStatus, SetStatus} from './setStatus'
 import {buildSetCategory, SetCategory} from './setCategory'
+import {buildDelete, Delete} from './delete'
 
 type Params = Pick<DeliveryParams, 'feedback'>;
 
@@ -22,6 +24,7 @@ export type FeedbackMethods = {
   update: Update,
   setStatus: SetStatus
   setCategory: SetCategory,
+  delete: Delete,
 }
 
 const buildPostRoutes = (methods: FeedbackMethods) => {
@@ -162,6 +165,34 @@ const buildPostRoutes = (methods: FeedbackMethods) => {
       createRouteHandler(methods.setCategory)
     )
     
+    /**
+     * @openapi
+     * /feedbacks/{id}:
+     *   delete:
+     *     tags: [Feedback]
+     *     parameters:
+     *     - in: path
+     *       name: id
+     *       required: true
+     *       description: The unique identifier of the feedback.
+     *     produces:
+     *       - application/json
+     *     responses:
+     *        200:
+     *           description: Deleted Feedback.
+     *           content:
+     *              application/json:
+     *                schema:
+     *                  properties:
+     *                    status:
+     *                      $ref: '#/components/schemas/Feedback'
+     */
+    namespace.delete(
+      '/:id',
+      deleteFeedbackRules,
+      createRouteHandler(methods.delete)
+    )
+    
     root.use('/feedbacks', namespace)
   }
 }
@@ -171,6 +202,7 @@ export const buildFeedbackHandler = (params: Params): IHandler => {
   const update = buildUpdate(params)
   const setStatus = buildSetStatus(params)
   const setCategory = buildSetCategory(params)
+  const deleteFeedback = buildDelete(params)
   
   return {
     registerRoutes: buildPostRoutes(
@@ -179,6 +211,7 @@ export const buildFeedbackHandler = (params: Params): IHandler => {
         update,
         setStatus,
         setCategory,
+        delete: deleteFeedback,
       }
     )
   }
