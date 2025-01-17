@@ -6,6 +6,7 @@ import {buildExampleHandler} from './example'
 import {buildAuthHandler} from './auth'
 import {buildPostHandler} from './post'
 import {buildStatusHandler} from './status'
+import {buildCategoryHandler} from '@/delivery/http/v1/handlers/category'
 
 export const buildHandler = (params: DeliveryParams): Express.Router => {
   const router = Express.Router()
@@ -14,6 +15,7 @@ export const buildHandler = (params: DeliveryParams): Express.Router => {
     buildAuthHandler(params),
     buildPostHandler(params),
     buildStatusHandler(params),
+    buildCategoryHandler(params),
     buildExampleHandler(params),
   ]
 
