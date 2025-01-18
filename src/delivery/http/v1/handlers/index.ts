@@ -8,6 +8,7 @@ import {buildPostHandler} from './post'
 import {buildStatusHandler} from './status'
 import {buildCategoryHandler} from './category'
 import {buildFeedbackHandler} from './feedback'
+import {buildVoteHandler} from './vote'
 
 export const buildHandler = (params: DeliveryParams): Express.Router => {
   const router = Express.Router()
@@ -18,6 +19,7 @@ export const buildHandler = (params: DeliveryParams): Express.Router => {
     buildStatusHandler(params),
     buildCategoryHandler(params),
     buildFeedbackHandler(params),
+    buildVoteHandler(params),
     buildExampleHandler(params),
   ]
 

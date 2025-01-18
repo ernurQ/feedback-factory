@@ -12,13 +12,15 @@ import {
   buildFeedbackRepository,
   FeedbackRepository
 } from './repository/feedback'
+import {buildVoteRepository, VoteRepository} from './repository/vote'
 
 export type Adapter = {
   userRepository: UserRepository,
   postRepository: PostRepository,
   statusRepository: StatusRepository,
   categoryRepository: CategoryRepository,
-  feedbackRepository: FeedbackRepository
+  feedbackRepository: FeedbackRepository,
+  voteRepository: VoteRepository,
   exampleGateway: ExampleGateway,
 }
 
@@ -28,6 +30,7 @@ export const buildAdapter = (params: AdapterParams): Adapter => {
   const statusRepository = buildStatusRepository(params)
   const categoryRepository = buildCategoryRepository(params)
   const feedbackRepository = buildFeedbackRepository(params)
+  const voteRepository = buildVoteRepository(params)
   const exampleGateway = buildExampleGateway(params);
 
   return {
@@ -36,6 +39,7 @@ export const buildAdapter = (params: AdapterParams): Adapter => {
     statusRepository,
     categoryRepository,
     feedbackRepository,
+    voteRepository,
     exampleGateway
   }
 }
