@@ -211,6 +211,33 @@ const buildPostRoutes = (methods: FeedbackMethods) => {
      *         - name: categoryId
      *           in: query
      *           required: false
+     *         - name: sortBy
+     *           in: query
+     *           required: false
+     *           schema:
+     *             type: string
+     *             enum:
+     *               - votes
+     *               - createdAt
+     *               - updatedAt
+     *         - name: orderBy
+     *           in: query
+     *           required: false
+     *           schema:
+     *             type: string
+     *             enum:
+     *               - asc
+     *               - desc
+     *         - name: offset
+     *           in: query
+     *           required: false
+     *           schema:
+     *             type: integer
+     *         - name: limit
+     *           in: query
+     *           required: false
+     *           schema:
+     *             type: integer
      *       responses:
      *         200:
      *           content:

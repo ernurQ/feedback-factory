@@ -6,14 +6,25 @@ export type GetMany = (params: {
   postId: string,
   statusId?: string,
   categoryId?: string,
-  sortBy?: 'votes' | 'createdAt' | 'updatedAt'
-  orderBy?: 'asc' | 'desc'
+  sortBy?: 'votes' | 'createdAt' | 'updatedAt',
+  orderBy?: 'asc' | 'desc',
+  offset: number,
+  limit: number,
 }) => Promise<{
   feedbacks: Array<IFeedback>,
 }>;
 
 export const buildGetMany = ({ adapter }: UseCaseParams): GetMany => (
-  async ({ postId, statusId, categoryId, sortBy = 'updatedAt', orderBy: reqOrderBy = 'desc' }) => {
+  async (
+    {
+      postId,
+      statusId,
+      categoryId,
+      sortBy = 'updatedAt',
+      orderBy: reqOrderBy = 'desc',
+      offset,
+      limit
+    }) => {
     let orderBy
     
     if (sortBy === 'votes') {
@@ -43,6 +54,8 @@ export const buildGetMany = ({ adapter }: UseCaseParams): GetMany => (
         }
       },
       orderBy,
+      skip: offset,
+      take: limit,
     })
     
     return { feedbacks }

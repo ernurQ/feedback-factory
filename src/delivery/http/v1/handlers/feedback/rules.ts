@@ -75,5 +75,7 @@ export const getManyFeedbacksRules = [
     .isIn(['votes', 'createdAt', 'updatedAt']),
   query('orderBy').optional().notEmpty()
     .isIn(['asc', 'desc']),
+  query('offset').optional().notEmpty().isInt({min: 0}).default(0),
+  query('limit').optional().notEmpty().isInt({min: 0}).default(10),
   validateSchema,
 ]
