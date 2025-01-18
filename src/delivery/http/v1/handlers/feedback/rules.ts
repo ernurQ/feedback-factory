@@ -79,3 +79,8 @@ export const getManyFeedbacksRules = [
   query('limit').optional().notEmpty().isInt({min: 0}).default(10),
   validateSchema,
 ]
+
+export const getFeedbackRules = [
+  param('id').exists().notEmpty().isString(),
+  validateSchema,
+]
