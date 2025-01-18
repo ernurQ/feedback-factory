@@ -198,33 +198,57 @@ const buildPostRoutes = (methods: FeedbackMethods) => {
     
     /**
      * @openapi
-     * /feedbacks:
-     *   get:
-     *     tags: [Feedback]
-     *     parameters:
-     *     - in: query
-     *       name: postId
-     *       required: true
-     *       description: The unique identifier of the feedback.
-     *     - in: query
-     *       name: statusId
-     *       required: false
-     *     - in: query
-     *       name: categoryId
-     *       required: false
-     *     produces:
-     *       - application/json
-     *     responses:
-     *        200:
-     *           description: List of feedbacks.
+     *   /feedbacks:
+     *     get:
+     *       tags: [Feedback]
+     *       parameters:
+     *         - name: postId
+     *           in: query
+     *           required: true
+     *         - name: statusId
+     *           in: query
+     *           required: false
+     *         - name: categoryId
+     *           in: query
+     *           required: false
+     *       responses:
+     *         200:
      *           content:
-     *              application/json:
-     *                schema:
-     *                  properties:
-     *                    feedbacks:
-     *                      type: array
-     *                      items:
-     *                        $ref: '#/components/schemas/Feedback'
+     *             application/json:
+     *               schema:
+     *                 type: object
+     *                 properties:
+     *                   feedbacks:
+     *                     type: array
+     *                     items:
+     *                       type: object
+     *                       properties:
+     *                         id:
+     *                           type: string
+     *                         title:
+     *                           type: string
+     *                         description:
+     *                           type: string
+     *                         createdAt:
+     *                           type: string
+     *                           format: date-time
+     *                         updatedAt:
+     *                           type: string
+     *                           format: date-time
+     *                         postId:
+     *                           type: string
+     *                         authorId:
+     *                           type: string
+     *                         statusId:
+     *                           type: string
+     *                         categoryId:
+     *                           type: string
+     *                         _count:
+     *                           type: object
+     *                           properties:
+     *                             votes:
+     *                               type: integer
+     *                               description: Number of votes for the feedback.
      */
     namespace.get(
       '/',
