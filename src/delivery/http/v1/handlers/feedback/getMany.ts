@@ -10,13 +10,23 @@ export const buildGetMany = ({feedback}: Params): GetMany => {
     const {
       postId,
       statusId,
-      categoryId
-    } = req.query
+      categoryId,
+      sortBy,
+      orderBy,
+    } = req.query as {
+      postId: string,
+      statusId?: string,
+      categoryId?: string,
+      sortBy?: 'votes' | 'createdAt' | 'updatedAt',
+      orderBy?: 'asc' | 'desc',
+    }
     
     const data = await feedback.getMany({
-      postId: postId as string,
-      statusId: statusId as string | undefined,
-      categoryId: categoryId as string | undefined,
+      postId,
+      statusId,
+      categoryId,
+      sortBy,
+      orderBy,
     })
     
     return res.status(200).json(data);

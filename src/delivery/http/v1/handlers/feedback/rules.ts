@@ -71,5 +71,9 @@ export const getManyFeedbacksRules = [
   query('postId').exists().notEmpty().isString(),
   query('statusId').optional().notEmpty().isString(),
   query('categoryId').optional().notEmpty().isString(),
+  query('sortBy').optional().notEmpty()
+    .isIn(['votes', 'createdAt', 'updatedAt']),
+  query('orderBy').optional().notEmpty()
+    .isIn(['asc', 'desc']),
   validateSchema,
 ]
