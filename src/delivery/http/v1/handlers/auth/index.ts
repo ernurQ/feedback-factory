@@ -1,12 +1,12 @@
-import Express from 'express';
-import { buildGetMe, GetMe } from './me';
-import { Refresh, buildRefresh } from './refresh';
-import { Authorize, buildAuthorize } from './authorize';
-import { Register, buildRegister } from './register';
-import { DeliveryParams } from '@/delivery/types';
-import { authorizationRules, getMeRules, refreshRules } from './rules';
-import { createRouteHandler } from '../../routeHandler';
-import { IHandler } from '../types';
+import Express from 'express'
+import {buildGetMe, GetMe} from './me'
+import {buildRefresh, Refresh} from './refresh'
+import {Authorize, buildAuthorize} from './authorize'
+import {buildRegister, Register} from './register'
+import {DeliveryParams} from '@/delivery/types'
+import {authorizationRules, getMeRules, refreshRules} from './rules'
+import {createRouteHandler} from '../../routeHandler'
+import {IHandler} from '../types'
 
 type Params = Pick<DeliveryParams, 'auth'>;
 
@@ -43,7 +43,7 @@ const buildRegisterRoutes = (methods: AuthMethods) => {
      *                schema:
      *                  properties:
      *                    user:
-     *                      $ref: '#/components/entities/User'
+     *                      $ref: '#/components/schemas/User'
      *                    accessToken:
      *                      type: string
      *                    refreshToken:
@@ -77,7 +77,7 @@ const buildRegisterRoutes = (methods: AuthMethods) => {
      *                schema:
      *                  properties:
      *                    user:
-     *                      $ref: '#/components/entities/User'
+     *                      $ref: '#/components/schemas/User'
      */
     namespace.post(
       '/signup',
@@ -131,7 +131,7 @@ const buildRegisterRoutes = (methods: AuthMethods) => {
      *           content:
      *              application/json:
      *                schema:
-     *                      $ref: '#/components/entities/User'
+     *                      $ref: '#/components/schemas/User'
      */
     namespace.get(
       '/me', 

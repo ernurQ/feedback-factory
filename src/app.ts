@@ -1,15 +1,14 @@
-import * as client from './lib/clients';
-import {config as cfg, config, devMode} from '@/config';
-import * as adapter from '@/adapter';
-import * as usecase from '@/domain/usecase';
-import * as service from '@/domain/service';
-import * as server from '@/delivery/http/server';
-import * as httpHandler from '@/delivery/http/v1/handlers';
-import { buildRouter } from '@/delivery/http/v1/router';
-import cluster from 'node:cluster';
-import os from 'node:os';
-import { log, logger } from './lib/logger';
-import chalk from 'chalk';
+import * as client from './lib/clients'
+import {config as cfg, config, devMode} from '@/config'
+import * as adapter from '@/adapter'
+import * as usecase from '@/domain/usecase'
+import * as service from '@/domain/service'
+import * as server from '@/delivery/http/server'
+import * as httpHandler from '@/delivery/http/v1/handlers'
+import {buildRouter} from '@/delivery/http/v1/router'
+import cluster from 'node:cluster'
+import {log, logger} from './lib/logger'
+import chalk from 'chalk'
 
 process.on('uncaughtException', function(err) { 
   logger.log({
@@ -52,34 +51,17 @@ const entry = async () => {
     service: svc,
     adapter: ad
   });
-
-  if (cluster.isPrimary) {
-    if (!devMode) {
-      const workerCount = process.env.WORKER_COUNT ? parseInt(process.env.WORKER_COUNT) : os.cpus().length - 1;
-
-      for (let i = 0; i < workerCount; i++) {
-        cluster.fork();
-      }
-    
-      cluster.on('exit', (worker) => {
-        log(`Worker ${worker.process.pid} died.`);
-      });
-    }
-  }
+  
 
   if (cluster.isPrimary) {
     const serverPort = cfg.http.port;
-    const serverHost = cfg.http.host;
+    const serverHost = 'localhost';
 
     log(
       `Server started ${chalk.blue(`[Port: ${serverPort}]`)} ${devMode ? chalk.red('[Dev Mode]') : chalk.green('[Prod Mode]')}\n` +
       `\tAPI URL: ${chalk.gray.underline(`http://${serverHost}:${serverPort}/api/v1`)}\n` +
       `\tSwagger URL: ${chalk.gray.underline(`http://${serverHost}:${serverPort}/api/v1/swagger`)} (OpenAPI: ${chalk.gray.underline(`http://${serverHost}:${serverPort}/api/v1/swagger.json`)} )\n`
     );
-
-    if (!devMode) {
-      return;
-    }
   }
 
   const routerHandler = httpHandler.buildHandler({ ...uc, ...ad });
