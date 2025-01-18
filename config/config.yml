@@ -1,12 +1,12 @@
 http: 
-  host: localhost
+  host: app
   port: 8000
 
 postgres:
   user: postgres
   password: '123'
   db: dev
-  host: 127.0.0.1
+  host: database
   port: 5432
 
 jwt:
