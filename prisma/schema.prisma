@@ -16,6 +16,7 @@ model User {
 
   posts     Post[]
   feedbacks Feedback[]
+  votes     Vote[]
 }
 
 model Post {
@@ -69,4 +70,15 @@ model Feedback {
 
   categoryId String?   @map("category_id")
   category   Category? @relation(fields: [categoryId], references: [id])
+  votes      Vote[]
+}
+
+model Vote {
+  id String @id @default(uuid())
+
+  voterId String @map("voter_id")
+  voter   User   @relation(fields: [voterId], references: [id])
+
+  feedbackId String   @map("feedback_id")
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
 }
