@@ -25,3 +25,15 @@ services:
     depends_on:
       database:
         condition: service_healthy
+
+  prisma-studio:
+    image: node:22-alpine
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    entrypoint: ["npx", "prisma", "studio"]
+    ports:
+      - "5555:5555"
+    depends_on:
+      database:
+        condition: service_healthy
