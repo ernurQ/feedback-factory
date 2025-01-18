@@ -3,7 +3,11 @@
    ```bash
    git clone https://github.com/ernurQ/feedback-factory
    ```
-2. Start the application:
+2. Move to project directory:
+   ```bash
+   cd ./feedback-factory
+   ```
+3. Start the application:
    ```bash
    docker-compose up --build
    ```
