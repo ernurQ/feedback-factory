@@ -66,3 +66,10 @@ export const deleteFeedbackRules = [
   authRequired(),
   validateSchema
 ];
+
+export const getManyFeedbacksRules = [
+  query('postId').exists().notEmpty().isString(),
+  query('statusId').optional().notEmpty().isString(),
+  query('categoryId').optional().notEmpty().isString(),
+  validateSchema,
+]

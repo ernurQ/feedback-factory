@@ -5,6 +5,7 @@ import {buildUpdate, Update} from './update'
 import {buildSetStatus, SetStatus} from './setStatus'
 import {buildSetCategory, SetCategory} from './setCategory'
 import {buildDelete, Delete} from './delete'
+import {buildGetMany, GetMany} from './getMany'
 
 export type FeedbackUseCase = {
   create: Create,
@@ -12,6 +13,7 @@ export type FeedbackUseCase = {
   setStatus: SetStatus,
   setCategory: SetCategory,
   delete: Delete,
+  getMany: GetMany,
 }
 
 export const buildFeedbackUseCase = (params: UseCaseParams): FeedbackUseCase => {
@@ -20,6 +22,7 @@ export const buildFeedbackUseCase = (params: UseCaseParams): FeedbackUseCase => 
   const setStatus = buildSetStatus(params)
   const setCategory = buildSetCategory(params)
   const deleteFeedback = buildDelete(params)
+  const getMany = buildGetMany(params)
   
   return {
     create,
@@ -27,5 +30,6 @@ export const buildFeedbackUseCase = (params: UseCaseParams): FeedbackUseCase => 
     setStatus,
     setCategory,
     delete: deleteFeedback,
+    getMany,
   }
 }

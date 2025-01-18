@@ -7,6 +7,7 @@ import {createRouteHandler} from '../../routeHandler'
 import {
   createFeedbackRules,
   deleteFeedbackRules,
+  getManyFeedbacksRules,
   setFeedbackCategoryRules,
   setFeedbackStatusRules,
   updateFeedbackRules
@@ -16,6 +17,7 @@ import {buildUpdate, Update} from './update'
 import {buildSetStatus, SetStatus} from './setStatus'
 import {buildSetCategory, SetCategory} from './setCategory'
 import {buildDelete, Delete} from './delete'
+import {buildGetMany, GetMany} from './getMany'
 
 type Params = Pick<DeliveryParams, 'feedback'>;
 
@@ -25,6 +27,7 @@ export type FeedbackMethods = {
   setStatus: SetStatus
   setCategory: SetCategory,
   delete: Delete,
+  getMany: GetMany,
 }
 
 const buildPostRoutes = (methods: FeedbackMethods) => {
@@ -193,6 +196,42 @@ const buildPostRoutes = (methods: FeedbackMethods) => {
       createRouteHandler(methods.delete)
     )
     
+    /**
+     * @openapi
+     * /feedbacks:
+     *   get:
+     *     tags: [Feedback]
+     *     parameters:
+     *     - in: query
+     *       name: postId
+     *       required: true
+     *       description: The unique identifier of the feedback.
+     *     - in: query
+     *       name: statusId
+     *       required: false
+     *     - in: query
+     *       name: categoryId
+     *       required: false
+     *     produces:
+     *       - application/json
+     *     responses:
+     *        200:
+     *           description: List of feedbacks.
+     *           content:
+     *              application/json:
+     *                schema:
+     *                  properties:
+     *                    feedbacks:
+     *                      type: array
+     *                      items:
+     *                        $ref: '#/components/schemas/Feedback'
+     */
+    namespace.get(
+      '/',
+      getManyFeedbacksRules,
+      createRouteHandler(methods.getMany)
+    )
+    
     root.use('/feedbacks', namespace)
   }
 }
@@ -203,6 +242,7 @@ export const buildFeedbackHandler = (params: Params): IHandler => {
   const setStatus = buildSetStatus(params)
   const setCategory = buildSetCategory(params)
   const deleteFeedback = buildDelete(params)
+  const getMany = buildGetMany(params)
   
   return {
     registerRoutes: buildPostRoutes(
@@ -212,6 +252,7 @@ export const buildFeedbackHandler = (params: Params): IHandler => {
         setStatus,
         setCategory,
         delete: deleteFeedback,
+        getMany,
       }
     )
   }
